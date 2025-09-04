@@ -1,396 +1,372 @@
-import React, { useState, memo } from "react";
-import { FaHeart, FaCartPlus, FaStar, FaChevronLeft } from "react-icons/fa";
-import { MdLocalOffer, MdOutlineSecurity } from "react-icons/md";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import SimilarProduct from "./SimillarProduct";
+import React, { useState } from "react";
+import { FaPlayCircle, FaHeart, FaShareAlt } from "react-icons/fa";
+import {
+  FaShieldAlt,
+  FaHeadset,
+  FaUndo,
+  FaQuestionCircle,
+  FaExchangeAlt,
+  FaBoxOpen,
+  FaThumbsDown,
+} from "react-icons/fa";
+import ReactImageMagnify from "react-image-magnify";
+import HermsWatch from "../../assets/Watche/stylish-golden-watch-white-surface.jpg";
+import thubnail from "../../assets/Watche/rendering-smart-home-device.jpg";
+import advertiseVideo from "../../assets/6811913-hd_1920_1080_25fps.mp4";
 import ReviewsRatings from "./ReviewsRatings";
 
-const strapSizes = ["20mm", "22mm", "24mm"];
-const colors = ["Black", "Silver", "Rose Gold", "Midnight Blue"];
+const ProductDetailPage = () => {
+  const [showVideo, setShowVideo] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(HermsWatch);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
 
-const sample = {
-  code: "WT-2024X",
-  title: "Chronograph Pro Smartwatch",
-  brandLine: "PRECISION TIMEWEAR COLLECTION",
-  price: 249,
-  oldPrice: 329,
-  images: [
-    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1558433916-90a36b44753f?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1547996160-81dfa63595aa?q=80&w=1600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?q=80&w=1600&auto=format&fit=crop",
-  ],
-  highlights: [
-    "1.4\" AMOLED Touch Display",
-    "Up to 14 days battery life",
-    "Water resistant up to 50m",
-    "Heart rate & SpO2 monitoring",
-    "Built-in GPS & NFC payments"
-  ],
-  details: "The Chronograph Pro combines classic watch aesthetics with modern smart features. Stainless steel case with scratch-resistant sapphire glass and interchangeable straps.",
-  specs: {
-    material: "Stainless Steel Case, Sapphire Glass",
-    connectivity: "Bluetooth 5.2, WiFi",
-    compatibility: "Android & iOS",
-    warranty: "2 Years International Warranty",
-    charging: "Magnetic Wireless Charging"
-  },
-  seller: {
-    name: "TimeTech Official Store",
-    feedback: "97% Positive Feedback",
-    products: "1200+ Products",
-    warranty: "Authenticity Guaranteed"
-  },
-};
+  const images = [HermsWatch, HermsWatch, HermsWatch]; // Replace with real images
 
-const currency = (n) => `$${Number(n).toFixed(0)}`;
+  const handleWishlistToggle = () => {
+    setIsWishlisted(!isWishlisted);
+    // Here you would typically make an API call to add/remove from wishlist
+  };
 
-const Thumb = memo(function Thumb({ src, active, onClick, alt }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`relative aspect-square w-16 overflow-hidden rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-        active ? "border-emerald-500 ring-emerald-500" : "border-gray-200 hover:border-gray-300"
-      }`}
-    >
-      <img src={src} alt={alt} className="h-full w-full object-cover" />
-    </button>
-  );
-});
+  const handleShareClick = () => {
+    setShowShareOptions(!showShareOptions);
+    // For a real implementation, you might use the Web Share API if available
+    if (navigator.share) {
+      navigator.share({
+        title: 'Hermès Kelly Red Watch',
+        text: 'Check out this beautiful Hermès watch!',
+        url: window.location.href,
+      })
+      .catch((error) => console.log('Error sharing:', error));
+    }
+  };
 
-const FeaturePill = ({ children }) => (
-  <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700">
-    {children}
-  </span>
-);
-
-const Accordion = ({ title, children, isOpen, toggle }) => (
-  <div className="border-b border-gray-200 py-4">
-    <button
-      onClick={toggle}
-      className="flex w-full items-center justify-between text-left font-medium text-gray-900 focus:outline-none"
-    >
-      <span>{title}</span>
-      {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
-    </button>
-    {isOpen && <div className="mt-3 text-sm text-gray-600">{children}</div>}
-  </div>
-);
-
-export default function WatchProductPage() {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("22mm");
-  const [selectedColor, setSelectedColor] = useState("Black");
-  const [openAccordion, setOpenAccordion] = useState("highlights");
-  
-  const discount = Math.round(((sample.oldPrice - sample.price) / sample.oldPrice) * 100);
-
-  const toggleAccordion = (section) => {
-    setOpenAccordion(openAccordion === section ? null : section);
+  const handleSocialShare = (platform) => {
+    // Implement social sharing for different platforms
+    let shareUrl = '';
+    const productUrl = encodeURIComponent(window.location.href);
+    const productTitle = encodeURIComponent('Hermès Kelly Red Watch');
+    
+    switch(platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${productTitle}&url=${productUrl}`;
+        break;
+      case 'pinterest':
+        shareUrl = `https://pinterest.com/pin/create/button/?url=${productUrl}&description=${productTitle}`;
+        break;
+      case 'whatsapp':
+        shareUrl = `https://api.whatsapp.com/send?text=${productTitle} ${productUrl}`;
+        break;
+      default:
+        return;
+    }
+    
+    window.open(shareUrl, '_blank');
+    setShowShareOptions(false);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Mobile header */}
-      <div className="sticky top-0 z-10 flex items-center justify-between bg-white p-4 shadow-sm lg:hidden">
-        <button className="text-gray-600">
-          <FaChevronLeft size={20} />
-        </button>
-        <h1 className="text-lg font-semibold text-gray-900">Watch Details</h1>
-        <button className="text-gray-600">
-          <FaHeart size={20} />
-        </button>
-      </div>
-
-      {/* Page container */}
-      <div className="mx-auto max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8 lg:pt-6">
-        {/* Breadcrumbs - hidden on mobile */}
-        <nav aria-label="Breadcrumb" className="mb-6 hidden text-sm text-gray-500 lg:block">
-          <ol className="flex items-center gap-2">
-            <li className="hover:text-gray-700">Home</li>
-            <span>/</span>
-            <li className="hover:text-gray-700">Watches</li>
-            <span>/</span>
-            <li className="hover:text-gray-700">Smartwatches</li>
-            <span>/</span>
-            <li className="font-medium text-gray-800">{sample.title}</li>
-          </ol>
-        </nav>
-
-        {/* Main card */}
-        <div className="grid grid-cols-1 gap-6 rounded-3xl bg-white p-4 shadow-sm md:p-6 lg:grid-cols-2 lg:p-8">
-          {/* LEFT: Gallery */}
-          <section className="lg:sticky lg:top-6 lg:self-start">
-            {/* Mobile product title */}
-            <div className="mb-4 lg:hidden">
-              <p className="text-xs font-semibold tracking-widest text-emerald-600">
-                {sample.brandLine}
-              </p>
-              <h1 className="mt-1 text-xl font-bold text-gray-900">
-                {sample.title}
-              </h1>
-            </div>
-
-            <div className="relative overflow-hidden rounded-2xl border border-gray-200">
-              <span className="absolute left-3 top-3 z-10">
-                <FeaturePill>Model: {sample.code}</FeaturePill>
-              </span>
-              <img
-                src={sample.images[selectedImage]}
-                alt={`${sample.title} – image ${selectedImage + 1}`}
-                className="aspect-square w-full object-contain p-8"
-              />
-            </div>
-
-            {/* Thumbnails */}
-            <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
-              {sample.images.map((src, i) => (
-                <Thumb
-                  key={i}
-                  src={src}
-                  alt={`${sample.title} thumbnail ${i + 1}`}
-                  active={selectedImage === i}
-                  onClick={() => setSelectedImage(i)}
+    <div className="bg-gray-100 min-h-screen py-6 px-4">
+      <div className="max-w-7xl mx-auto bg-white shadow-md rounded-lg p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Section - Images with Magnify */}
+        <div>
+          <div className="relative">
+            {/* Wishlist and Share Icons */}
+            <div className="absolute top-2 right-2 z-10 flex flex-col gap-2">
+              <button 
+                onClick={handleWishlistToggle}
+                className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              >
+                <FaHeart 
+                  size={20} 
+                  className={isWishlisted ? "text-red-500" : "text-gray-600"} 
                 />
-              ))}
-            </div>
-          </section>
-
-          {/* RIGHT: Details */}
-          <section className="flex flex-col">
-            {/* Desktop product title */}
-            <div className="hidden lg:block">
-              <p className="text-xs font-semibold tracking-widest text-emerald-600">
-                {sample.brandLine}
-              </p>
-              <h1 className="mt-1 text-2xl font-bold text-gray-900 sm:text-3xl">
-                {sample.title}
-              </h1>
-            </div>
-
-            {/* Pricing */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-semibold text-gray-900">{currency(sample.price)}</span>
-                <span className="text-sm text-gray-400 line-through">{currency(sample.oldPrice)}</span>
-              </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-600">
-                <MdLocalOffer className="-mt-px" /> {discount}% OFF
-              </span>
-              <span className="text-sm text-gray-500">+ Free Shipping</span>
-            </div>
-
-            {/* Color selector */}
-            <div className="mt-6">
-              <p className="text-sm font-medium text-gray-800">Select Color</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`min-w-[60px] rounded-xl border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      selectedColor === color
-                        ? "border-emerald-600 bg-emerald-50 text-emerald-700 ring-emerald-600"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                    }`}
-                    aria-pressed={selectedColor === color}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Size selector */}
-            <div className="mt-4">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-800">Strap Size</p>
-                <button className="text-sm font-medium text-emerald-600 hover:underline">
-                  Size Guide
+              </button>
+              
+              <div className="relative">
+                <button 
+                  onClick={handleShareClick}
+                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors"
+                  aria-label="Share product"
+                >
+                  <FaShareAlt size={20} className="text-gray-600" />
                 </button>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {strapSizes.map((sz) => (
-                  <button
-                    key={sz}
-                    onClick={() => setSelectedSize(sz)}
-                    className={`min-w-[60px] rounded-xl border px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                      selectedSize === sz
-                        ? "border-emerald-600 bg-emerald-50 text-emerald-700 ring-emerald-600"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                    }`}
-                    aria-pressed={selectedSize === sz}
-                  >
-                    {sz}
-                  </button>
-                ))}
-              </div>
-              <p className="mt-2 text-xs text-gray-500">Only 2 left in stock</p>
-            </div>
-
-            {/* Key features chips */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              {sample.highlights.slice(0, 3).map((feature) => (
-                <FeaturePill key={feature}>{feature}</FeaturePill>
-              ))}
-            </div>
-
-            {/* CTAs - sticky on mobile */}
-            <div className="sticky bottom-0 mt-6 flex flex-wrap gap-3 bg-white py-4 lg:static lg:py-0">
-              <button className="flex-1 basis-[48%] items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-3 font-semibold text-gray-800 shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 lg:inline-flex lg:flex-none lg:px-5">
-                <FaHeart className="hidden lg:block" /> Wishlist
-              </button>
-              <button className="flex-1 basis-[48%] items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 lg:inline-flex lg:flex-none lg:px-6">
-                <FaCartPlus className="hidden lg:block" /> Add to Cart
-              </button>
-            </div>
-
-            {/* Mobile accordions */}
-            <div className="mt-6 lg:hidden">
-              <Accordion 
-                title="Key Features" 
-                isOpen={openAccordion === "highlights"} 
-                toggle={() => toggleAccordion("highlights")}
-              >
-                <ul className="space-y-2 pl-1">
-                  {sample.highlights.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Accordion>
-              
-              <Accordion 
-                title="Product Details" 
-                isOpen={openAccordion === "details"} 
-                toggle={() => toggleAccordion("details")}
-              >
-                <p className="leading-6">{sample.details}</p>
-              </Accordion>
-              
-              <Accordion 
-                title="Specifications" 
-                isOpen={openAccordion === "specs"} 
-                toggle={() => toggleAccordion("specs")}
-              >
-                <ul className="space-y-2">
-                  {Object.entries(sample.specs).map(([key, value]) => (
-                    <li key={key} className="flex justify-between">
-                      <span className="font-medium text-gray-700">{key}:</span>
-                      <span className="text-gray-600">{value}</span>
-                    </li>
-                  ))}
-                </ul>
-              </Accordion>
-            </div>
-
-            {/* Desktop product details */}
-            <div className="mt-8 hidden space-y-6 lg:block">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900">Key Features</h3>
-                <ul className="mt-3 space-y-2">
-                  {sample.highlights.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                      <span className="text-sm text-gray-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900">Product Details</h3>
-                <p className="mt-2 text-sm leading-6 text-gray-600">{sample.details}</p>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-gray-900">Specifications</h3>
-                <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
-                  {Object.entries(sample.specs).map(([key, value]) => (
-                    <div key={key} className="rounded-lg bg-gray-50 p-3">
-                      <p className="font-medium text-gray-700">{key}</p>
-                      <p className="mt-1 text-gray-600">{value}</p>
-                    </div>
-                  ))}
-                </div>
+                
+                {/* Share Options Dropdown */}
+                {showShareOptions && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                    <button 
+                      onClick={() => handleSocialShare('facebook')}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    >
+                      Share on Facebook
+                    </button>
+                    <button 
+                      onClick={() => handleSocialShare('twitter')}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    >
+                      Share on Twitter
+                    </button>
+                    <button 
+                      onClick={() => handleSocialShare('pinterest')}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    >
+                      Share on Pinterest
+                    </button>
+                    <button 
+                      onClick={() => handleSocialShare('whatsapp')}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    >
+                      Share on WhatsApp
+                    </button>
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(window.location.href)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                    >
+                      Copy Link
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
+            
+            <ReactImageMagnify
+              {...{
+                smallImage: {
+                  alt: "Hermes Watch",
+                  isFluidWidth: true,
+                  src: selectedImage,
+                },
+                largeImage: {
+                  src: selectedImage,
+                  width: 1200,
+                  height: 1800,
+                },
+                enlargedImageContainerDimensions: {
+                  width: "120%",
+                  height: "120%",
+                },
+              }}
+            />
+          </div>
 
-            {/* Seller info */}
-            <div className="mt-8 hidden lg:block">
-              <h3 className="text-sm font-semibold text-gray-900">Seller Information</h3>
-              <div className="mt-3 rounded-2xl border border-gray-200 p-4">
-                <a href="#" className="font-medium text-emerald-700 hover:underline">
-                  {sample.seller.name}
-                </a>
-                <ul className="mt-3 space-y-2 text-sm text-gray-600">
-                  <li className="flex items-center gap-2">
-                    <FaStar className="text-amber-400" /> {sample.seller.feedback}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <FaStar className="text-amber-400" /> {sample.seller.products}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <MdOutlineSecurity className="text-emerald-500" /> {sample.seller.warranty}
-                  </li>
-                </ul>
+          {/* Thumbnails */}
+          <div className="flex gap-3 mt-4">
+            {images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`watch-thumbnail-${idx}`}
+                onClick={() => setSelectedImage(img)}
+                className={`w-20 h-20 object-cover rounded-md border cursor-pointer ${
+                  selectedImage === img
+                    ? "border-red-500"
+                    : "hover:border-red-500"
+                }`}
+              />
+            ))}
+
+            {/* Video Thumbnail */}
+            <div
+              onClick={() => setShowVideo(true)}
+              className="relative w-20 h-20 rounded-md overflow-hidden border cursor-pointer hover:border-red-500"
+            >
+              <img
+                src={HermsWatch}
+                alt="watch-video"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <FaPlayCircle size={28} className="text-white" />
               </div>
             </div>
-          </section>
+          </div>
         </div>
 
-        {/* Trust badges */}
-        <div className="mt-8 grid grid-cols-2 gap-4 rounded-2xl bg-white p-6 shadow-sm sm:grid-cols-4">
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-emerald-100 p-2 text-emerald-600">
-              <MdOutlineSecurity size={20} />
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">Authenticity</p>
-              <p className="text-sm font-semibold">Guaranteed</p>
+        {/* Right Section - Details */}
+        <div>
+          <h1 className="text-2xl font-semibold mb-2">
+            Hermès Kelly Red Watch 20mm – Classic Imported Watch Model For Men
+          </h1>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="bg-green-600 text-white text-sm px-2 py-1 rounded">
+              4.6 ★
+            </span>
+            <span className="text-gray-600 text-sm">(8 Reviews)</span>
+          </div>
+
+          <div className="text-3xl font-bold text-red-600 mb-2">400.00 AED</div>
+          <p className="text-gray-500 mb-4">
+            600.00 AED <span className="text-green-600 ml-2">28% OFF</span>
+          </p>
+
+          {/* Offers */}
+          <div className="border rounded-lg p-4 mb-4 bg-green-50">
+            <h2 className="font-semibold mb-2">Offers And Coupons</h2>
+            <ul className="list-disc ml-5 text-sm text-gray-700 space-y-1">
+              <li>
+                Pay Online & Get EXTRA 2.5% OFF on BELL Inverter Welding
+                Machines
+              </li>
+              <li>Get GST Invoice And Save Up To 18% on Business Purchases</li>
+              <li>
+                On Min. Purchase Of Rs. 3000 Across Banks And Rs. 4500 For Bajaj
+                Finserv
+              </li>
+            </ul>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-4 mb-6">
+            <button className="flex-1 bg-blue-900 text-white py-3 rounded-lg font-semibold hover:bg-blue-800">
+              ADD TO CART
+            </button>
+            <button className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-500">
+              BUY NOW
+            </button>
+          </div>
+
+          {/* Delivery Details */}
+          <div className="mb-6">
+            <h2 className="font-semibold mb-2">Delivery Details</h2>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Enter Your Pincode"
+                className="flex-1 border rounded-lg px-3 py-2 outline-none focus:border-red-500"
+              />
+              <button className="bg-blue-900 text-white px-4 rounded-lg hover:bg-blue-800">
+                Check
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-blue-100 p-2 text-blue-600">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">Returns</p>
-              <p className="text-sm font-semibold">30 Days</p>
+
+          {/* About Product */}
+          <div className="mb-6">
+            <h2 className="font-semibold mb-2">About This Product</h2>
+            <ul className="list-disc ml-5 text-gray-700 text-sm space-y-1">
+              <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+              <li>
+                Phasellus dolor dolor, dapibus in urna a, malesuada fermentum
+                ex.
+              </li>
+              <li>
+                Morbi tempor libero sit amet lectus faucibus, nec fringilla
+                ligula finibus.
+              </li>
+            </ul>
+            <button className="text-red-600 text-sm mt-2 hover:underline">
+              Show All Key Features
+            </button>
+          </div>
+
+          {/* Specifications */}
+          <div className="mb-6">
+            <h2 className="font-semibold mb-2">Product Specifications</h2>
+            <table className="w-full text-sm border">
+              <tbody>
+                <tr className="border">
+                  <td className="p-2 font-medium">Brand</td>
+                  <td className="p-2">Hermes Kelly</td>
+                </tr>
+                <tr className="border">
+                  <td className="p-2 font-medium">Dial</td>
+                  <td className="p-2">Round</td>
+                </tr>
+                <tr className="border">
+                  <td className="p-2 font-medium">Size</td>
+                  <td className="p-2">45 MM</td>
+                </tr>
+                <tr className="border">
+                  <td className="p-2 font-medium">Belt Type</td>
+                  <td className="p-2">Leather</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Product Video Preview */}
+          <div className="mb-6"> {/* ✅ added mb-6 */}
+            <h2 className="font-semibold mb-2">Product Videos</h2>
+            <div
+              onClick={() => setShowVideo(true)}
+              className="relative rounded-lg overflow-hidden border cursor-pointer"
+            >
+              <img src={thubnail} alt="product video" className="w-full" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <FaPlayCircle size={42} className="text-white" />
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-purple-100 p-2 text-purple-600">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12 6a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V6.75A.75.75 0 0112 6zm0 12a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
-              </svg>
+
+          {/* ✅ Benefits & Return/Warranty Policy */}
+          <div className="border rounded-lg p-4 mb-6 ">
+            <h2 className="font-semibold mb-4">Benefits</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="flex items-center gap-2">
+                <FaShieldAlt className="text-blue-600" />
+                <span>Secure Payments</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaHeadset className="text-blue-600" />
+                <span>365 Days Help Desk</span>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">Delivery</p>
-              <p className="text-sm font-semibold">2-4 Days</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="rounded-full bg-amber-100 p-2 text-amber-600">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">Warranty</p>
-              <p className="text-sm font-semibold">2 Years</p>
+
+            <h2 className="font-semibold mb-4">Return & Warranty Policy</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <FaUndo className="text-blue-600" />
+                <span>Upto 7 Days Returnable</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaQuestionCircle className="text-blue-600" />
+                <span>Missing Product</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaExchangeAlt className="text-blue-600" />
+                <span>Wrong Product</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaBoxOpen className="text-blue-600" />
+                <span>Damaged Product</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaThumbsDown className="text-blue-600" />
+                <span>Defective Product</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-   <ReviewsRatings/>
-<section className="mt-16">
-  <SimilarProduct />
-</section>
+
+      <div>
+        <ReviewsRatings/>
+      </div>
+
+      {/* Video Modal */}
+      {showVideo && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 relative">
+            <button
+              onClick={() => setShowVideo(false)}
+              className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded"
+            >
+              X
+            </button>
+            <video controls autoPlay className="w-full rounded-b-lg">
+              <source src={advertiseVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default ProductDetailPage;

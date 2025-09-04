@@ -1,136 +1,161 @@
-import React from "react";
-import { FaStar, FaCheckCircle, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaStar, FaThumbsUp, FaThumbsDown } from "react-icons/fa";
+import SimillarProduct from "./SimillarProduct";
+import WriteReview from "./WriteReview";
+import SuccessModal from "./SuccessModal";
+import HermsWatch from "../../assets/Watche/stylish-golden-watch-white-surface.jpg";
+
+const reviews = [
+  {
+    id: 1,
+    name: "Ombir Singh",
+    date: "November 16, 2022",
+    avatar: "https://i.pravatar.cc/50?img=1",
+    rating: 5,
+    verified: true,
+    title: "Ibell Tig Welding Machine Is Good For The Price",
+    content:
+      "I Have Been Using This Machine For Almost A Year Now And It Has Been Working Great. It Is A Very Versatile Machine That Can Be Used For Both Flux Core And Solid Wire Welding. The Machine Is Very Easy To Use And Has A Very User Friendly Interface. The Machine Comes With A 1 Year Warranty Which Is A Great Plus.",
+  },
+  {
+    id: 2,
+    name: "Mamta",
+    date: "November 16, 2022",
+    avatar: "https://i.pravatar.cc/50?img=5",
+    rating: 5,
+    verified: true,
+    title: "Ibell Tig Welding Machine Is Good For The Price",
+    content:
+      "I Have Been Using This Machine For Almost A Year Now And It Has Been Working Great. It Is A Very Versatile Machine That Can Be Used For Both Flux Core And Solid Wire Welding. The Machine Is Very Easy To Use And Has A Very User Friendly Interface. The Machine Comes With A 1 Year Warranty Which Is A Great Plus.",
+  },
+];
 
 const ReviewsRatings = () => {
-  const reviews = [
-    {
-      id: 1,
-      name: "Ombir Singh",
-      date: "November 16, 2022",
-      verified: true,
-      rating: 5,
-      title: "Ibell Tig Welding Machine Is Good For The Price",
-      description:
-        "I have been using this machine for almost a year now and it has been working great. It is a very versatile machine that can be used for both flux core and solid wire welding. The machine is very easy to use and has a very user friendly interface. The machine comes with a 1 year warranty which is a great plus.",
-      avatar: "https://i.pravatar.cc/50?img=1",
-      likes: 0,
-      dislikes: 1,
-    },
-    {
-      id: 2,
-      name: "Mamta",
-      date: "November 16, 2022",
-      verified: true,
-      rating: 5,
-      title: "Ibell Tig Welding Machine Is Good For The Price",
-      description:
-        "I have been using this machine for almost a year now and it has been working great. It is a very versatile machine that can be used for both flux core and solid wire welding. The machine is very easy to use and has a very user friendly interface. The machine comes with a 1 year warranty which is a great plus.",
-      avatar: "https://i.pravatar.cc/50?img=2",
-      likes: 0,
-      dislikes: 1,
-    },
-  ];
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const averageRating = 4.6;
-  const totalReviews = 7;
-  const distribution = [
-    { stars: 5, count: 4 },
-    { stars: 4, count: 3 },
-    { stars: 3, count: 0 },
-    { stars: 2, count: 0 },
-    { stars: 1, count: 0 },
-  ];
+  const handleSubmitReview = (reviewData) => {
+    console.log("Review submitted:", reviewData);
+    setShowReviewModal(false); // Close review modal
+    setShowSuccessModal(true); // Show success modal
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccessModal(false); // Close success modal
+  };
+
+  const product = {
+    name: "Wireless Bluetooth Headphones",
+    brand: "AudioTech",
+    image: HermsWatch,
+  };
 
   return (
-    <div className="bg-gray-100 py-8">
-      <div className="mx-auto max-w-5xl rounded-lg bg-white p-6 shadow">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b pb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Reviews & Ratings</h2>
-          <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+    <div className="bg-gray-100 py-6 px-4">
+      <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-md p-6">
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold">Reviews & Ratings</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              IBELL M200-105 IGBT Inverter 2 in 1 Flux Core/Solid Wire MAG
+              Welding Machine With 1 Year Warranty
+            </p>
+          </div>
+          <button
+            onClick={() => setShowReviewModal(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          >
             Write a Review
           </button>
         </div>
 
-        {/* Rating Summary */}
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* Average Rating */}
-          <div className="flex flex-col items-center justify-center rounded-lg bg-gray-50 p-6">
-            <p className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              {averageRating} <FaStar className="text-blue-600" />
-            </p>
-            <p className="text-sm text-gray-500 mt-1">Average Rating</p>
-            <p className="text-xs text-gray-400">Based on {totalReviews} Reviews</p>
-          </div>
+        {/* Write Review Modal */}
+        <WriteReview
+          isOpen={showReviewModal}
+          product={product}
+          onClose={() => setShowReviewModal(false)}
+          onSubmit={handleSubmitReview}
+        />
 
-          {/* Distribution */}
-          <div className="md:col-span-2 flex flex-col justify-center gap-2">
-            {distribution.map((d) => (
-              <div key={d.stars} className="flex items-center gap-2">
-                <span className="w-6 text-sm font-medium text-gray-700">{d.stars}</span>
-                <FaStar className="text-yellow-400" />
-                <div className="relative h-2 flex-1 overflow-hidden rounded bg-gray-200">
+        {/* Success Modal */}
+        <SuccessModal 
+          isOpen={showSuccessModal} 
+          onClose={handleSuccessClose} 
+        />
+
+        {/* Rating Summary */}
+        <div className="flex flex-col sm:flex-row gap-6 border-b pb-6">
+          <div className="flex flex-col items-center sm:items-start">
+            <p className="text-3xl font-bold flex items-center gap-1 text-blue-600">
+              4.6 <FaStar className="text-yellow-500" />
+            </p>
+            <p className="text-sm text-gray-500">Average Rating</p>
+            <p className="text-sm text-gray-500">Based On 7 Ratings</p>
+            <p className="text-sm text-gray-500">And 7 Reviews</p>
+          </div>
+          <div className="flex-1">
+            {[5, 4, 3, 2, 1].map((star, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <span className="w-4">{star}</span>
+                <div className="flex-1 bg-gray-200 rounded h-2">
                   <div
-                    className="absolute left-0 top-0 h-2 bg-blue-500"
-                    style={{ width: `${(d.count / totalReviews) * 100}%` }}
+                    className={`h-2 rounded ${star >= 4 ? "bg-blue-600" : "bg-gray-300"}`}
+                    style={{
+                      width: star === 5 ? "60%" : star === 4 ? "40%" : "0%",
+                    }}
                   ></div>
                 </div>
-                <span className="w-6 text-right text-sm text-gray-600">{d.count}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Reviews List */}
-        <div className="mt-8 space-y-6">
-          {reviews.map((r) => (
-            <div key={r.id} className="border-b pb-6 last:border-b-0">
-              <div className="flex items-start gap-4">
-                {/* Avatar */}
+        <div className="mt-6 space-y-8">
+          {reviews.map((review) => (
+            <div key={review.id} className="border-b pb-6">
+              <div className="flex items-center gap-3 mb-2">
                 <img
-                  src={r.avatar}
-                  alt={r.name}
-                  className="h-12 w-12 rounded-full object-cover"
+                  src={review.avatar}
+                  alt={review.name}
+                  className="w-10 h-10 rounded-full"
                 />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-800">{r.name}</h3>
-                      <p className="text-xs text-gray-500">{r.date}</p>
-                    </div>
-                  </div>
-                  {/* Verified */}
-                  {r.verified && (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-green-600">
-                      <FaCheckCircle /> Verified Purchase
-                    </p>
-                  )}
-                  {/* Stars */}
-                  <div className="mt-2 flex items-center gap-1 text-green-500">
-                    {Array.from({ length: r.rating }).map((_, i) => (
-                      <FaStar key={i} />
-                    ))}
-                  </div>
-                  {/* Title */}
-                  <p className="mt-2 font-medium text-gray-900">{r.title}</p>
-                  {/* Description */}
-                  <p className="mt-1 text-sm text-gray-600 leading-6">{r.description}</p>
-
-                  {/* Like/Dislike */}
-                  <div className="mt-3 flex items-center gap-4 text-sm text-gray-500">
-                    <button className="flex items-center gap-1 hover:text-blue-600">
-                      <FaThumbsUp /> {r.likes}
-                    </button>
-                    <button className="flex items-center gap-1 hover:text-red-600">
-                      <FaThumbsDown /> {r.dislikes}
-                    </button>
-                  </div>
+                <div>
+                  <h4 className="font-semibold">{review.name}</h4>
+                  <p className="text-xs text-gray-500">{review.date}</p>
                 </div>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-2">
+                {[...Array(review.rating)].map((_, i) => (
+                  <FaStar key={i} className="text-green-500" />
+                ))}
+                {review.verified && (
+                  <span className="text-sm text-gray-600 border-l pl-2">
+                    Verified Purchase
+                  </span>
+                )}
+              </div>
+
+              <h3 className="font-semibold mt-2">{review.title}</h3>
+              <p className="text-gray-600 text-sm mt-1">{review.content}</p>
+
+              {/* Like / Dislike */}
+              <div className="flex gap-4 mt-3">
+                <button className="flex items-center gap-1 text-gray-500 hover:text-blue-600">
+                  <FaThumbsUp /> <span className="text-sm">0</span>
+                </button>
+                <button className="flex items-center gap-1 text-gray-500 hover:text-red-600">
+                  <FaThumbsDown /> <span className="text-sm">1</span>
+                </button>
               </div>
             </div>
           ))}
         </div>
       </div>
+      <SimillarProduct />
     </div>
   );
 };

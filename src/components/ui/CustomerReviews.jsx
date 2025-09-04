@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
 import avatar from '../../assets/man-avatar_16905682.png'
 
 const CustomerReviews = () => {
@@ -87,40 +86,7 @@ const CustomerReviews = () => {
 
   return (
     <>
-      <Head>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": averageRating,
-              "reviewCount": testimonials.length,
-              "bestRating": "5",
-              "worstRating": "1"
-            },
-            "review": testimonials.map(testimonial => ({
-              "@type": "Review",
-              "reviewRating": {
-                "@type": "Rating",
-                "ratingValue": testimonial.rating,
-                "bestRating": "5",
-                "worstRating": "1"
-              },
-              "author": {
-                "@type": "Person",
-                "name": testimonial.name
-              },
-              "datePublished": testimonial.date,
-              "reviewBody": testimonial.comment,
-              "itemReviewed": {
-                "@type": "Product",
-                "name": testimonial.product
-              }
-            }))
-          })}
-        </script>
-      </Head>
+      
 
       <section 
         className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden"
