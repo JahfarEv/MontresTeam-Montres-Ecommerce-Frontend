@@ -307,46 +307,46 @@ const SubNavbar = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
     {
       name: "WATCHES",
       subMenu: [
-        { name: "Luxury Watches", path: "/watches/luxury" },
-        { name: "Smart Watches", path: "/watches/smart" },
-        { name: "Arabic Dial", path: "/watches/arabic" },
+        { name: "Luxury Watches", path: "/watches" },
+        { name: "Smart Watches", path: "/watches" },
+        { name: "Arabic Dial", path: "/watches" },
       ],
     },
     {
       name: "CLOCKS",
       subMenu: [
-        { name: "Wall Clocks", path: "/clocks/wall" },
-        { name: "Desk Clocks", path: "/clocks/desk" },
-        { name: "Antique Clocks", path: "/clocks/antique" },
+        { name: "Wall Clocks", path: "/clocks" },
+        { name: "Desk Clocks", path: "/clocks" },
+        { name: "Antique Clocks", path: "/clocks" },
       ],
     },
     {
       name: "LEATHERS",
       subMenu: [
-        { name: "Wallets", path: "/leathers/wallets" },
-        { name: "Belts", path: "/leathers/belts" },
-        { name: "Arabic Designs", path: "/leathers/arabic" },
+        { name: "Wallets", path: "/leathers" },
+        { name: "Belts", path: "/leathers" },
+        { name: "Arabic Designs", path: "/leathers" },
       ],
     },
     {
       name: "ACCESSORIES",
       subMenu: [
-        { name: "Pens", path: "/accessories/pens" },
-        { name: "Cufflinks", path: "/accessories/cufflinks" },
+        { name: "Pens", path: "/accessories" },
+        { name: "Cufflinks", path: "/accessories" },
       ],
     },
     {
       name: "JEWELRY",
       subMenu: [
-        { name: "Gold", path: "/jewelry/gold" },
-        { name: "Silver", path: "/jewelry/silver" },
+        { name: "Gold", path: "/jewelry" },
+        { name: "Silver", path: "/jewelry" },
       ],
     },
     {
       name: "BRAND NEW",
       subMenu: [
-        { name: "Latest Arrivals", path: "/brand-new/latest" },
-        { name: "2024 Collection", path: "/brand-new/2024" },
+        { name: "Latest Arrivals", path: "/brand-new" },
+        { name: "2024 Collection", path: "/brand-new" },
       ],
     },
   ];

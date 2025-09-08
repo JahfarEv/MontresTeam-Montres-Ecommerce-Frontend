@@ -20,12 +20,19 @@ import "../src/styles/responsive.css";
 import Blog from "./layouts/Blog";
 import Wishlist from "./components/ui/Wishlist";
 import ProductDetailPage from "./components/ui/ProductDetailPage";
-
+import Watches from "./features/products/Watches";
+import ForgotPasswordModal from "./components/modals/ForgetPassword";
+import ClocksPage from "./features/products/Clocks";
+import LeathersPage from "./features/products/Lethers";
+import AccessoriesPage from "./features/products/Accesories";
+import JewelleryPage from "./features/products/Jwellery";
+import BrandNewPage from "./features/products/BrandNew";
 function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <div>
+      <div className="App">{/* <ForgotPasswordModal /> */}</div>
       <Navbar onSignUpClick={() => setModalIsOpen(true)} />
       <Register
         isOpen={modalIsOpen}
@@ -51,9 +58,16 @@ function App() {
             </>
           }
         />
+        <Route path="/watches" element={<Watches />} />
+        <Route path="/clocks" element={<ClocksPage />} />
+        <Route path="/leathers" element={<LeathersPage />} />
+        <Route path="/accessories" element={<AccessoriesPage />} />
+        <Route path="/jewelry" element={<JewelleryPage />} />
+        <Route path="/brand-new" element={<BrandNewPage />} />
+
         <Route path="/cart" element={<ItemCart />} />
-        <Route path="/wishlist" element={<Wishlist/>}/>
-        <Route path="/DetailPage" element={<ProductDetailPage/>}/>
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/DetailPage" element={<ProductDetailPage />} />
         <Route path="/watches/luxury" element={<ProductPage />} />
       </Routes>
       <Footer />
