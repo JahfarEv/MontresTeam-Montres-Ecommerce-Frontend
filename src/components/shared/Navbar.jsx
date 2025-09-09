@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FaShoppingCart,
   FaUser,
@@ -6,16 +6,10 @@ import {
   FaTimes,
   FaSearch,
   FaHeart,
-  FaChevronRight,
-  FaChevronDown,
-  FaGlobe,
-  FaPhone,
-  FaEnvelope,
-  FaComments,
-  FaQuestionCircle,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "../../assets/montreslogo.png";
+import SubNavbar from "./SubNavabar";
 
 const Navbar = ({ onSignUpClick }) => {
   const [scrolled, setScrolled] = useState(false);
@@ -41,41 +35,43 @@ const Navbar = ({ onSignUpClick }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleSearchFocus = useCallback(() => {
+    setIsSearchFocused(true);
+  }, []);
+
+  const handleSearchBlur = useCallback(() => {
+    setTimeout(() => setIsSearchFocused(false), 200);
+  }, []);
+
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev);
+  }, []);
+
   return (
     <>
       {/* Main Header */}
       <header
         className={`w-full bg-white sticky top-0 z-50 transition-all duration-300 ${
-          scrolled ? "shadow-lg" : "shadow-md"
+          scrolled ? "shadow-md" : "shadow-sm"
         }`}
-        role="banner"
       >
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1536px] mx-auto px-4 md:px-8 lg:px-12">
           <div className="flex justify-between items-center h-16 md:h-20 lg:h-24">
-            {/* Logo and Mobile Menu Toggle */}
-            <div className="flex items-center space-x-3 md:space-x-4">
+            {/* Logo & Mobile Menu */}
+            <div className="flex items-center gap-3 md:gap-4">
               <button
-                className="md:hidden text-gray-700 mr-1"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-gray-700"
+                onClick={toggleMobileMenu}
                 aria-label="Toggle menu"
               >
-                {isMobileMenuOpen ? (
-                  <FaTimes size={20} />
-                ) : (
-                  <FaBars size={20} />
-                )}
+                {isMobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
               </button>
 
-              <Link
-                to="/"
-                className="flex items-center"
-                aria-label="Montres Home"
-              >
+              <Link to="/" className="flex items-center" aria-label="Montres Home">
                 <img
                   src={logo}
                   alt="Montres - Luxury Watches Dubai"
                   className="h-10 md:h-14 lg:h-16 w-auto object-contain"
-                  itemProp="logo"
                 />
                 {isClient && (
                   <meta itemProp="url" content={window.location.origin} />
@@ -84,40 +80,29 @@ const Navbar = ({ onSignUpClick }) => {
             </div>
 
             {/* Search Bar - Desktop */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-4 lg:mx-6 relative">
+            <div className="hidden md:flex flex-1 max-w-2xl mx-6 relative">
               <div
                 className={`flex w-full border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm ${
-                  isSearchFocused
-                    ? "ring-2 ring-[#1e518e] border-transparent"
-                    : ""
-                } transition-all`}
+                  isSearchFocused ? "ring-2 ring-[#1e518e]" : ""
+                }`}
                 role="search"
               >
                 <input
                   type="search"
                   placeholder="Search Rolex, Omega, Patek Philippe..."
-                  className="flex-grow px-6 py-4 outline-none text-lg placeholder-gray-400"
+                  className="flex-grow px-4 lg:px-6 py-2 lg:py-3 text-base lg:text-lg outline-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() =>
-                    setTimeout(() => setIsSearchFocused(false), 200)
-                  }
-                  aria-label="Search luxury watches"
+                  onFocus={handleSearchFocus}
+                  onBlur={handleSearchBlur}
                 />
-                <button
-                  className="bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] text-white px-6 lg:px-8 flex items-center justify-center gap-2 hover:from-[#1a457a] hover:to-[#00559f] transition-all"
-                  aria-label="Submit search"
-                >
-                  <FaSearch className="text-xl" />
+                <button className="bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] text-white px-4 lg:px-6 flex items-center justify-center">
+                  <FaSearch className="text-lg lg:text-xl" />
                 </button>
               </div>
 
               {searchQuery && isSearchFocused && (
-                <div
-                  className="absolute top-full mt-1 w-full bg-white shadow-lg rounded-lg py-2 z-30 border border-gray-200"
-                  role="listbox"
-                >
+                <div className="absolute top-full mt-1 w-full bg-white shadow-lg rounded-lg py-2 z-30 border border-gray-200">
                   <div className="px-3 py-2 text-xs text-gray-500 font-medium">
                     Popular in UAE
                   </div>
@@ -126,8 +111,7 @@ const Navbar = ({ onSignUpClick }) => {
                       key={search.term}
                       to={search.path}
                       className="block px-4 py-2 text-sm hover:bg-gray-50"
-                      role="option"
-                      aria-label={`Search for ${search.term}`}
+                      onClick={() => setIsSearchFocused(false)}
                     >
                       {search.term}
                     </Link>
@@ -137,46 +121,35 @@ const Navbar = ({ onSignUpClick }) => {
             </div>
 
             {/* Desktop Navigation */}
-            <nav
-              className="hidden md:flex items-center gap-3 lg:gap-5 xl:gap-6 text-gray-700"
-              aria-label="Main navigation"
-            >
+            <nav className="hidden md:flex items-center gap-6 text-gray-700">
               <Link
-                to="/wishlist"
-                className="relative flex items-center justify-center p-2 text-gray-700 hover:text-[#1e518e] transition-all"
+                to="/userAccount"
+                className="hover:text-[#1e518e] transition-all"
                 aria-label="Wishlist"
               >
                 <FaHeart className="text-xl lg:text-2xl" />
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-md border-2 border-white">
-                  2
-                </span>
               </Link>
 
-              <div className="relative">
-                <Link
-                  to="/cart"
-                  className="flex items-center justify-center p-2 rounded-full bg-gradient-to-br from-[#d4af37] to-[#f1e5ac] text-gray-800 hover:from-[#c19b2e] hover:to-[#e0d294] transition-all shadow-md hover:shadow-lg"
-                  aria-label="Shopping cart"
-                >
-                  <FaShoppingCart className="text-xl lg:text-2xl" />
-                </Link>
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-md border-2 border-white">
-                  3
-                </span>
-              </div>
+              <Link
+                to="/cart"
+                className="flex items-center justify-center p-2 rounded-full bg-gradient-to-br bg-[#2d5582] text-white py-3 px-4 hover:bg-[#2d5587]shadow-md"
+                aria-label="Shopping cart"
+              >
+                <FaShoppingCart className="text-xl lg:text-2xl" />
+              </Link>
 
               <button
-                className="ml-1 lg:ml-2 bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] hover:from-[#1a457a] hover:to-[#00559f] text-white px-3 sm:px-4 lg:px-5 xl:px-6 py-1.5 sm:py-2 lg:py-2.5 rounded-full flex items-center gap-1 sm:gap-2 text-xs sm:text-sm lg:text-base transition-all shadow-md hover:shadow-lg whitespace-nowrap"
-                aria-label="Sign in or register"
                 onClick={onSignUpClick}
+                className="bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] text-white px-5 py-2 rounded-full flex items-center gap-2 text-sm lg:text-base shadow-md hover:shadow-lg"
+                aria-label="Sign in or register"
               >
-                <FaUser className="text-xs sm:text-sm" />
+                <FaUser />
                 <span>Sign In</span>
               </button>
             </nav>
 
             {/* Mobile Icons */}
-            <div className="md:hidden flex items-center gap-2 sm:gap-3">
+            <div className="md:hidden flex items-center gap-3">
               <button
                 onClick={() => setIsSearchFocused(!isSearchFocused)}
                 className="text-gray-700 p-1.5"
@@ -185,32 +158,24 @@ const Navbar = ({ onSignUpClick }) => {
                 <FaSearch size={18} />
               </button>
 
-              <Link
-                to="/wishlist"
-                className="relative p-1.5"
-                aria-label="Wishlist"
-              >
+              <Link to="/userAccount" className="relative p-1.5" aria-label="Wishlist">
                 <FaHeart size={18} className="text-gray-700" />
-                <span className="absolute -top-0.5 -right-0.5 bg-[#1e518e] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
-                  2
-                </span>
+                {/* <span className="absolute -top-0.5 -right-0.5 bg-[#1e518e] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
+                  
+                </span> */}
               </Link>
 
-              <Link
-                to="/cart"
-                className="relative p-1.5"
-                aria-label="Shopping cart"
-              >
+              <Link to="/cart" className="relative p-1.5" aria-label="Shopping cart">
                 <FaShoppingCart size={18} className="text-gray-700" />
-                <span className="absolute -top-0.5 -right-0.5 bg-[#1e518e] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
-                  3
-                </span>
+                {/* <span className="absolute -top-0.5 -right-0.5 bg-[#1e518e] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">
+                  
+                </span> */}
               </Link>
 
               <button
-                className="bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] hover:from-[#1a457a] hover:to-[#00559f] text-white px-3 py-1.5 rounded-full flex items-center gap-1 text-xs transition-all shadow-md hover:shadow-lg whitespace-nowrap"
-                aria-label="Sign in"
                 onClick={onSignUpClick}
+                className="bg-gradient-to-r from-[#1e518e] to-[#0061b0ee] text-white px-3 py-1.5 rounded-full flex items-center gap-1 text-xs shadow-md hover:shadow-lg"
+                aria-label="Sign in"
               >
                 <FaUser className="text-xs" />
                 <span className="hidden xs:inline">Sign In</span>
@@ -228,12 +193,8 @@ const Navbar = ({ onSignUpClick }) => {
                   className="flex-grow px-4 py-2 outline-none text-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Mobile search"
                 />
-                <button
-                  className="bg-[#1e518e] text-white px-4 flex items-center justify-center"
-                  aria-label="Submit search"
-                >
+                <button className="bg-[#1e518e] text-white px-4 flex items-center justify-center">
                   <FaSearch size={16} />
                 </button>
               </div>
@@ -256,13 +217,13 @@ const Navbar = ({ onSignUpClick }) => {
         </div>
       </header>
 
-      {/* SubNavbar */}
+      {/* Sub Navbar */}
       <SubNavbar
         isMobileMenuOpen={isMobileMenuOpen}
         setIsMobileMenuOpen={setIsMobileMenuOpen}
       />
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -646,5 +607,6 @@ const SubNavbar = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
     </>
   );
 };
+
 
 export default Navbar;

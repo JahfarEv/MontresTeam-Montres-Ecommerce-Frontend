@@ -1,24 +1,18 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useCallback } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaEye, FaEyeSlash } from "react-icons/fa";
 
-const RegisterForm = ({ setActiveTab, onRequestClose }) => {
+// eslint-disable-next-line no-unused-vars
+const LoginForm = ({ setActiveTab, onRequestClose }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
-    agreeToTerms: false
+    rememberMe: false
   });
 
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword(prev => !prev);
-  }, []);
-
-  const toggleConfirmPasswordVisibility = useCallback(() => {
-    setShowConfirmPassword(prev => !prev);
   }, []);
 
   const handleInputChange = useCallback((e) => {
@@ -31,35 +25,33 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log("Registration data:", formData);
-    // onRequestClose(); // Close modal on successful registration
+    // Handle login logic here
+    console.log("Login data:", formData);
+    // onRequestClose(); // Close modal on successful login
   }, [formData]);
 
   return (
     <div className="space-y-5">
       <div>
         <h3 className="text-xl font-semibold mb-2">
-          Create your account
+          Sign in to your account
         </h3>
         <p className="text-sm text-gray-600">
-          Join our community today
+          Access your personalized dashboard
         </p>
       </div>
       
       <form className="space-y-4" onSubmit={handleSubmit}>
-       
-        
         <div>
           <label
-            htmlFor="register-email"
+            htmlFor="login-email"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             Email Address
           </label>
           <input
             type="email"
-            id="register-email"
+            id="login-email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
@@ -71,7 +63,7 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
         
         <div>
           <label
-            htmlFor="register-password"
+            htmlFor="login-password"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             Password
@@ -79,14 +71,13 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              id="register-password"
+              id="login-password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              placeholder="Create a password"
+              placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10 transition"
               required
-              minLength="8"
             />
             <button
               type="button"
@@ -97,72 +88,39 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
-          <p className="mt-1 text-xs text-gray-500">
-            Minimum 8 characters with at least one number
-          </p>
         </div>
         
-        <div>
-          <label
-            htmlFor="register-confirm-password"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Confirm Password
-          </label>
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              id="register-confirm-password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Confirm your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10 transition"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-              onClick={toggleConfirmPasswordVisibility}
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-            >
-              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-          </div>
-        </div>
-        
-        <div className="flex items-start">
-          <div className="flex items-center h-5">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
             <input
               type="checkbox"
-              id="terms"
-              name="agreeToTerms"
-              checked={formData.agreeToTerms}
+              id="remember-me"
+              name="rememberMe"
+              checked={formData.rememberMe}
               onChange={handleInputChange}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              required
             />
+            <label
+              htmlFor="remember-me"
+              className="ml-2 block text-sm text-gray-700"
+            >
+              Remember me
+            </label>
           </div>
-          <label
-            htmlFor="terms"
-            className="ml-2 block text-sm text-gray-700"
+          <button
+            type="button"
+            className="text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors"
+            onClick={() => setActiveTab("forgot")}
           >
-            I agree to the{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Privacy Policy
-            </a>
-          </label>
+            Forgot Password?
+          </button>
         </div>
         
         <button
           type="submit"
           className="w-full bg-gradient-to-r bg-[#2d5582]  hover:bg-[#2d5587] text-white py-2.5 px-4 rounded-md transition duration-200 shadow-md hover:shadow-lg"
         >
-          CREATE ACCOUNT
+          SIGN IN
         </button>
       </form>
 
@@ -172,7 +130,7 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-2 bg-white text-gray-500">
-            Or sign up with
+            Or continue with
           </span>
         </div>
       </div>
@@ -193,19 +151,19 @@ const RegisterForm = ({ setActiveTab, onRequestClose }) => {
           <span className="text-sm font-medium">Facebook</span>
         </button>
       </div>
-
+      
       <p className="text-sm text-gray-600 text-center mt-4">
-        Already have an account?{" "}
+        Don't have an account?{" "}
         <button
           type="button"
           className="text-blue-600 hover:text-blue-500 font-medium transition-colors"
-          onClick={() => setActiveTab("login")}
+          onClick={() => setActiveTab("register")}
         >
-          Sign in
+          Sign up
         </button>
       </p>
     </div>
   );
 };
 
-export default React.memo(RegisterForm);
+export default React.memo(LoginForm);
